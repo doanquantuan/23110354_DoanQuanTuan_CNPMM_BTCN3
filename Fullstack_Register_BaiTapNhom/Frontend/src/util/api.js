@@ -1,13 +1,11 @@
 import axios from "./axios.customize";
 
-const createUserApi = (name, email, password) => {
-  const URL_API = "/v1/api/register";
-  const data = {
-    email,
-    password,
-  };
+const createUserApi = (data) => {
+  return axios.post("/v1/api/register", data);
+};
 
-  return axios.post(URL_API, data);
+const verifyOTPApi = (data) => {
+  return axios.post("/v1/api/verify-otp", data);
 };
 
 const loginApi = (email, password) => {
@@ -25,4 +23,4 @@ const getUserApi = () => {
   return axios.get(URL_API);
 };
 
-export { createUserApi, loginApi, getUserApi };
+export { createUserApi, loginApi, getUserApi, verifyOTPApi };

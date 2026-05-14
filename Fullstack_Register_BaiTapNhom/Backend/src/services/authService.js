@@ -39,8 +39,7 @@ const handleRegister = async (data) => {
     const newUser = await db.User.create({
       email: data.email,
       password: hashedPassword,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      fullName: data.fullName,
       address: data.address,
       phoneNumber: data.phoneNumber,
       gender: data.gender === "1" ? true : false,
@@ -71,50 +70,86 @@ const handleRegister = async (data) => {
 };
 
 const verifyOTP = async (email, code) => {
-  const user = await db.User.findOne({
-    where: { email },
-  });
+  try {
+    if (!email || !email.includes("@")) {
+      return {
+        errCode: 1,
+        message: "Email không đúng định dạng!",
+      };
+    }
 
-  const otpRecord = await db.OTP.findOne({
-    where: {
-      userId: user.id,
-      code,
-    },
-  });
+    if (!code) {
+      return {
+        errCode: 2,
+        message: "Vui lòng nhập mã OTP!",
+      };
+    }
 
-  if (!otpRecord) {
-    throw new Error("Invalid OTP");
+    const user = await db.User.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      return {
+        errCode: 3,
+        message: "Email không tồn tại!",
+      };
+    }
+
+    const otpRecord = await db.OTP.findOne({
+      where: {
+        userId: user.id,
+        code,
+      },
+    });
+
+    if (!otpRecord) {
+      return {
+        errCode: 4,
+        message: "Mã OTP không chính xác!",
+      };
+    }
+
+    if (otpRecord.isUsed) {
+      return {
+        errCode: 5,
+        message: "Mã OTP đã được sử dụng!",
+      };
+    }
+
+    if (new Date() > otpRecord.expiresAt) {
+      return {
+        errCode: 6,
+        message: "Mã OTP đã hết hạn!",
+      };
+    }
+
+    await db.User.update(
+      {
+        isVerified: true,
+      },
+      {
+        where: { id: user.id },
+      },
+    );
+
+    await db.OTP.update(
+      {
+        isUsed: true,
+      },
+      {
+        where: { id: otpRecord.id },
+      },
+    );
+
+    return {
+      errCode: 0,
+      message: "Xác thực tài khoản thành công!",
+    };
+  } catch (error) {
+    console.error("Lỗi tại verifyOTP:", error);
+    throw error;
   }
-
-  if (new Date() > otpRecord.expiresAt) {
-    throw new Error("OTP expired");
-  }
-
-  await db.User.update(
-    {
-      isVerified: true,
-    },
-    {
-      where: { id: user.id },
-    },
-  );
-
-  await db.OTP.update(
-    {
-      isUsed: true,
-    },
-    {
-      where: { id: otpRecord.id },
-    },
-  );
-
-  // await db.OTP.destroy({
-  //   where: { userId: user.id },
-  // });
-
-  return {
-    message: "Verify account successfully",
-  };
 };
 
 export default {

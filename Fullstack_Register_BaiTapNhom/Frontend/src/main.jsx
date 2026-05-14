@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import "./styles/global.css";
 
 import "./index.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RegisterPage from "./pages/register.jsx";
+import VerifyOTPPage from "./pages/verify-signup-otp.jsx";
 import UserPage from "./pages/user.jsx";
 import HomePage from "./pages/home.jsx";
 import LoginPage from "./pages/login.jsx";
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "register",
     element: <RegisterPage />,
+  },
+  {
+    path: "verify-otp",
+    element: <VerifyOTPPage />,
   },
   {
     path: "login",
