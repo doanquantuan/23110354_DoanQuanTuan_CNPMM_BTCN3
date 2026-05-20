@@ -17,8 +17,8 @@ const LoginPage = () => {
     if (res && res.EC === 0) {
       localStorage.setItem("access_token", res.access_token);
       notification.success({
-        message: "LOGIN USER",
-        description: "Success",
+        message: "ĐĂNG NHẬP",
+        description: "Đăng nhập thành công",
       });
       setAuth({
         isAuthenticated: true,
@@ -30,8 +30,8 @@ const LoginPage = () => {
       navigate("/");
     } else {
       notification.error({
-        message: "LOGIN USER",
-        description: res?.EM ?? "error",
+        message: "ĐĂNG NHẬP",
+        description: res?.EM ?? "Đăng nhập thất bại",
       });
     }
   };
@@ -47,7 +47,7 @@ const LoginPage = () => {
             borderRadius: "5px",
           }}
         >
-          <legend>Login</legend>
+          <legend>Đăng nhập</legend>
           <Form
             name="basic"
             onFinish={onFinish}
@@ -57,32 +57,33 @@ const LoginPage = () => {
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
+              rules={[{ required: true, message: "Vui lòng nhập email!" }]}
             >
               <Input />
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label="Mật khẩu"
               name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
+              rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
             >
               <Input.Password />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Login
+              <Button type="primary" htmlType="submit" block>
+                Đăng nhập
               </Button>
             </Form.Item>
           </Form>
+          <div style={{ textAlign: "right", marginBottom: "10px" }}>
+            <Link to={"/forgot-password"}>Quên mật khẩu?</Link>
+          </div>
           <Link to={"/"}>
-            <ArrowLeftOutlined /> Back to Home
+            <ArrowLeftOutlined /> Quay lại trang chủ
           </Link>
           <Divider />
           <div style={{ textAlign: "center" }}>
-            Don't have an account? <Link to={"/register"}>Register now</Link>
+            Chưa có tài khoản? <Link to={"/register"}>Đăng ký ngay</Link>
           </div>
         </fieldset>
       </Col>

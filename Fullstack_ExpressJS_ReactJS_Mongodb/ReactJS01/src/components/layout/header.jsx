@@ -20,12 +20,12 @@ const Header = () => {
     },
     ...(auth.isAuthenticated
       ? [
-          {
-            label: <Link to={"/user"}>Users</Link>,
-            key: "user",
-            icon: <UsergroupAddoutlined />,
-          },
-        ]
+        {
+          label: <Link to={"/user"}>Users</Link>,
+          key: "user",
+          icon: <UsergroupAddOutlined />,
+        },
+      ]
       : []),
     {
       label: `Welcome ${auth?.user?.email ?? ""}`,
@@ -34,35 +34,35 @@ const Header = () => {
       children: [
         ...(auth.isAuthenticated
           ? [
-              {
-                label: (
-                  <span
-                    onclick={() => {
-                      localStorage.clear("access_token");
-                      setCurrent("home");
+            {
+              label: (
+                <span
+                  onclick={() => {
+                    localStorage.clear("access_token");
+                    setCurrent("home");
 
-                      setAuth({
-                        isAuthenticated: false,
-                        user: {
-                          email: "",
-                          name: "",
-                        },
-                      });
-                      navigate("/");
-                    }}
-                  >
-                    Đăng xuất
-                  </span>
-                ),
-                key: "logout",
-              },
-            ]
+                    setAuth({
+                      isAuthenticated: false,
+                      user: {
+                        email: "",
+                        name: "",
+                      },
+                    });
+                    navigate("/");
+                  }}
+                >
+                  Đăng xuất
+                </span>
+              ),
+              key: "logout",
+            },
+          ]
           : [
-              {
-                label: <Link to={"/login"}>Đăng nhap</Link>,
-                key: "login",
-              },
-            ]),
+            {
+              label: <Link to={"/login"}>Đăng nhap</Link>,
+              key: "login",
+            },
+          ]),
       ],
     },
   ];

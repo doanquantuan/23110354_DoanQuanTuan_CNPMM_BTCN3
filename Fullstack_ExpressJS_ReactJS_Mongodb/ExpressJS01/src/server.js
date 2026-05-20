@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express"); //commonjs
 const configViewEngine = require("./config/viewEngine");
 const apiRoutes = require("./routes/api");
-const connection = require("./config/database");
+const { connection } = require("./config/database");
 const { getHomepage } = require("./controllers/homeController");
 const cors = require("cors");
 const app = express(); //cau hinh app la express
@@ -21,7 +21,7 @@ app.use("/", webAPI);
 app.use("/v1/api/", apiRoutes);
 (async () => {
   try {
-    //ket noi database using mongoose
+    //ket noi database using sequelize/mysql
     await connection();
     //lang nghe port trong env
     app.listen(port, () => {
